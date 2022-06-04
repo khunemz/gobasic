@@ -2,12 +2,37 @@ package main
 
 import (
 	"fmt"
+	"gobasic/customer"
+	"gobasic/user"
 	"unicode/utf8"
 )
 
 func main() {
+
+	person := user.Person{FirstName: "Chutipong", LastName: "Roobklom", Age: 32}
+	fmt.Printf("Name: %v %v,Age: %v\n", person.FirstName, person.LastName, person.Age)
+
+	fmt.Printf("GET Name: %v \n", person.GetName())
+	person.SetName("chutipong", "roobklom")
+	fmt.Printf("GET Name Again: %v \n", person.GetName())
+
+	var num1 int
+	var num2 *int
+	num1 = 10
+	num2 = &num1
+
+	fmt.Printf("%v \n", &num1)
+	fmt.Printf("%v \n", num2)
+	fmt.Printf("%v \n", *num2)
+
+	res := customer.Sum(&num1)
+	fmt.Printf("result is : %v\n", res)
+	// fmt.Printf("%v", summaryvar)
+
 	println("Hello world")
 	fmt.Printf("Hello %v\n", "Hello world another one.")
+
+	fmt.Printf("Customer : %v\n", customer.GetCustomer())
 
 	myNumber := 1
 
@@ -81,10 +106,19 @@ func main() {
 
 	// fmt.Printf("value : %v, keyword: %v", one, two)
 	fmt.Printf("value : %v", one)
+
+	summation := cal(sumNumber)
+	fmt.Printf("Summation: %v\n", summation)
 }
 
 func sumNumber(a, b int) int {
 	return a + b
+}
+
+func cal(f func(int, int) int) int {
+	summation := f(10, 50)
+	fmt.Printf("%v\n", summation)
+	return summation
 }
 
 func tupleSum(a, b int) (int, string) {
