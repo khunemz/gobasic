@@ -73,4 +73,20 @@ func main() {
 		fmt.Printf("value in array is : %v\n", v)
 	}
 
+	c := sumNumber(10, 30)
+
+	fmt.Printf("Summary number : %v\n", c)
+
+	one, _ := tupleSum(40, 50)
+
+	// fmt.Printf("value : %v, keyword: %v", one, two)
+	fmt.Printf("value : %v", one)
+}
+
+func sumNumber(a, b int) int {
+	return a + b
+}
+
+func tupleSum(a, b int) (int, string) {
+	return a + b, "Summary is :"
 }
