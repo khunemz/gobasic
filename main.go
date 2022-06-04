@@ -33,8 +33,8 @@ func main() {
 	fmt.Printf("Your grade is : %v\n", grade)
 
 	// ARRAY
-	myArr := []int{1, 2, 3, 5, 6, 7, 8}
-	myArr = append(myArr, 4)
+	myArr := []int{10, 20, 30, 50, 60, 70, 80, 90, 100}
+	myArr = append(myArr, 100)
 	fmt.Printf("MyArray: %v\n", myArr)
 
 	for i := 0; i < len(myArr); i++ {
@@ -48,4 +48,29 @@ func main() {
 	// from index, to index+1
 	y := myArr[1:5]
 	fmt.Printf("Slice : %v\n", y)
+
+	// map
+	countries := map[string]string{}
+	countries["th"] = "Thailand"
+	countries["usa"] = "United States"
+	countries["jp"] = "Japan"
+
+	country, isExisted := countries["jp"]
+	if isExisted {
+		fmt.Printf("Country existed %v\n", country)
+	} else {
+		fmt.Printf("Country not existed")
+	}
+
+	cnt := 0
+	for cnt < len(myArr) {
+		fmt.Printf("Value in Array is : %v\n", myArr[cnt])
+		cnt++
+	}
+
+	// for length
+	for _, v := range myArr {
+		fmt.Printf("value in array is : %v\n", v)
+	}
+
 }
