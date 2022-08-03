@@ -1,0 +1,10 @@
+app:
+  port: 8000
+
+db:
+  driver: "sqlite3"
+  host: "Database.db"
+  # port: 3306
+  # username: root
+  # password: P@ssw0rd
+  # database: "Database.db"
