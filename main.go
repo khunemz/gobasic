@@ -2,125 +2,103 @@ package main
 
 import (
 	"fmt"
-	"gobasic/customer"
-	"gobasic/user"
-	"unicode/utf8"
+	"go-hexagonal/handler"
+	"go-hexagonal/logs"
+	"go-hexagonal/repository"
+	"go-hexagonal/service"
+	"net/http"
+	"strings"
+	"time"
+
+	"github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/spf13/viper"
 )
 
 func main() {
 
-	person := user.Person{FirstName: "Chutipong", LastName: "Roobklom", Age: 32}
-	fmt.Printf("Name: %v %v,Age: %v\n", person.FirstName, person.LastName, person.Age)
+	// use gorm orm
+	// db, err := gorm.Open(sqlite.Open("Database.db"), &gorm.Config{})
+	// db.AutoMigrate(&repository.Customer{})
+	initConfig()
+	initTimeZone()
+	db := initDatabase()
+	// use sqlx
 
-	fmt.Printf("GET Name: %v \n", person.GetName())
-	person.SetName("chutipong", "roobklom")
-	fmt.Printf("GET Name Again: %v \n", person.GetName())
+	// /* migration script (for sqlite only) */
+	// schema := `CREATE TABLE customers (customer_id integer not null primary key AUTOINCREMENT, name varchar(100) not null,
+	// date_of_birth varchar(30) null, city varchar(30) null, zip_code varchar(30) null, status tinyint not null default 1);`
+	// result, migrationErr := db.Exec(schema)
+	// if migrationErr != nil {
+	// 	panic(migrationErr)
+	// }
+	// fmt.Println("migration result : ", result)
+	// db.MustExec("DELETE FROM customers")
+	/* seedint data */
+	// db.MustExec("INSERT INTO customers ( name, date_of_birth, city, zip_code, status) VALUES (?, ?, ?, ?, ?)",
+	// 	"Chaiwat", "1992-01-13", "Bangkok", "10110", 1)
+	// db.MustExec("INSERT INTO customers ( name, date_of_birth, city, zip_code, status) VALUES (?, ?, ?, ?, ?)",
+	// 	"Chutipong", "1990-05-15", "Bangkok", "12150", 1)
+	// db.MustExec("INSERT INTO customers ( name, date_of_birth, city, zip_code, status) VALUES (?, ?, ?, ?, ?)",
+	// 	"Uychai", "1993-02-03", "Bangkok", "11001", 1)
+	// db.MustExec("INSERT INTO customers ( name, date_of_birth, city, zip_code, status) VALUES (?, ?, ?, ?, ?)",
+	// 	"Mark", "1994-01-12", "Bangkok", "10150", 1)
+	// db.MustExec("INSERT INTO customers ( name, date_of_birth, city, zip_code, status) VALUES (?, ?, ?, ?, ?)",
+	// 	"Jenet", "1992-10-11", "Bangkok", "10120", 1)
+	// db.MustExec("INSERT INTO customers ( name, date_of_birth, city, zip_code, status) VALUES (?, ?, ?, ?, ?)",
+	// 	"Robert", "1989-05-01", "Bangkok", "10130", 1)
+	// db.MustExec("INSERT INTO customers ( name, date_of_birth, city, zip_code, status) VALUES (?, ?, ?, ?, ?)",
+	// 	"Lotus", "1998-02-28", "Bangkok", "10140", 1)
 
-	var num1 int
-	var num2 *int
-	num1 = 10
-	num2 = &num1
+	/** layers */
+	customerRepository := repository.NewCustomerRepositoryDB(db)
+	customerRepositoryMock := repository.NewCustomerRepositoryMock()
+	_ = customerRepositoryMock
+	custService := service.NewCustomerService(customerRepository)
+	customerHandler := handler.NewCustomerHandler(custService)
 
-	fmt.Printf("%v \n", &num1)
-	fmt.Printf("%v \n", num2)
-	fmt.Printf("%v \n", *num2)
-
-	res := customer.Sum(&num1)
-	fmt.Printf("result is : %v\n", res)
-	// fmt.Printf("%v", summaryvar)
-
-	println("Hello world")
-	fmt.Printf("Hello %v\n", "Hello world another one.")
-
-	fmt.Printf("Customer : %v\n", customer.GetCustomer())
-
-	myNumber := 1
-
-	fmt.Printf("Number: %v\n", myNumber)
-
-	point := 72
-
-	grade := ""
-	if point < 50 && point >= 0 {
-		grade = "F"
-	} else if point >= 50 && point < 60 {
-		grade = "D"
-	} else if point >= 60 && point < 70 {
-		grade = "C"
-	} else if point >= 70 && point < 80 {
-		grade = "B"
-	} else if point >= 80 {
-		grade = "A"
-	} else {
-		grade = "INVALID"
-	}
-
-	fmt.Printf("Your grade is : %v\n", grade)
-
-	// ARRAY
-	myArr := []int{10, 20, 30, 50, 60, 70, 80, 90, 100}
-	myArr = append(myArr, 100)
-	fmt.Printf("MyArray: %v\n", myArr)
-
-	for i := 0; i < len(myArr); i++ {
-		fmt.Printf("Nums in arr : %v \n", myArr[i])
-	}
-
-	name := "ชุติพงศ์"
-	fmt.Printf("Chars in name count: %v\n", utf8.RuneCountInString(name))
-
-	// slice
-	// from index, to index+1
-	y := myArr[1:5]
-	fmt.Printf("Slice : %v\n", y)
-
-	// map
-	countries := map[string]string{}
-	countries["th"] = "Thailand"
-	countries["usa"] = "United States"
-	countries["jp"] = "Japan"
-
-	country, isExisted := countries["jp"]
-	if isExisted {
-		fmt.Printf("Country existed %v\n", country)
-	} else {
-		fmt.Printf("Country not existed")
-	}
-
-	cnt := 0
-	for cnt < len(myArr) {
-		fmt.Printf("Value in Array is : %v\n", myArr[cnt])
-		cnt++
-	}
-
-	// for length
-	for _, v := range myArr {
-		fmt.Printf("value in array is : %v\n", v)
-	}
-
-	c := sumNumber(10, 30)
-
-	fmt.Printf("Summary number : %v\n", c)
-
-	one, _ := tupleSum(40, 50)
-
-	// fmt.Printf("value : %v, keyword: %v", one, two)
-	fmt.Printf("value : %v", one)
-
-	summation := cal(sumNumber)
-	fmt.Printf("Summation: %v\n", summation)
+	router := mux.NewRouter()
+	router.HandleFunc("/customers", customerHandler.GetCustomers).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{id:[0-9]+}", customerHandler.GetCustomer).Methods(http.MethodGet)
+	port := viper.GetInt("app.port")
+	logs.Info("Start app in port " + viper.GetString("app.port"))
+	http.ListenAndServe(fmt.Sprintf(":%v", port), router)
 }
 
-func sumNumber(a, b int) int {
-	return a + b
+func initConfig() {
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	// check config whether or not existing if not it will overide
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+	err := viper.ReadInConfig()
+
+	if err != nil {
+		panic("Cannot read config file")
+	}
 }
 
-func cal(f func(int, int) int) int {
-	summation := f(10, 50)
-	fmt.Printf("%v\n", summation)
-	return summation
+func initTimeZone() {
+	ict, err := time.LoadLocation("Asia/Bangkok")
+	if err != nil {
+		panic(err)
+	}
+
+	time.Local = ict
 }
 
-func tupleSum(a, b int) (int, string) {
-	return a + b, "Summary is :"
+func initDatabase() *sqlx.DB {
+	dsn := fmt.Sprintf("%s", viper.GetString("db.host"))
+	db, err := sqlx.Connect(viper.GetString("db.driver"), dsn)
+
+	if err != nil {
+		logs.Error(fmt.Sprintf("Error connot connect to database ... %v", err))
+	}
+	db.SetConnMaxLifetime(3 * time.Minute)
+	db.SetMaxOpenConns(20)
+	db.SetMaxIdleConns(20)
+	return db
 }
