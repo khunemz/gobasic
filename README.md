@@ -17,10 +17,13 @@ ok      gobasic/services        0.420s
 
 Test Everything
 ```go
-go test gobasic
+go test gobasic/./...
 ```
 
-
+Test sub test
+```go
+go test gobasic/services -run="TestCheckGrade/A" -v
+```
 Coverage
 ```go
 go test gobasic/services -cover
