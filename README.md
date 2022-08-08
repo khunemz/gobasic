@@ -17,7 +17,7 @@ ok      gobasic/services        0.420s
 
 Test Everything
 ```go
-go test gobasic/./...
+go test ./...
 ```
 
 Test sub test
@@ -29,4 +29,24 @@ Coverage
 go test gobasic/services -cover
 ```
 
-Virutalizes Coverage 
+Benchnark
+```go
+go test gobasic/services -bench=.
+
+// benchmark memory
+go test gobasic/services -bench=. -benchmem
+```
+
+Go doc
+```go
+# terminal
+go get golang.org/x/tools/cmd/godoc
+godoc -http=8000
+```
+
+mysql
+```
+CREATE USER 'user1'@'localhost' IDENTIFIED WITH mysql_native_password BY 'P#ssw0rd'
+# do not use this in production
+GRANT ALL PRIVILEGES ON *.* TO 'user1'@'localhost' WITH GRANT OPTION;
+```
