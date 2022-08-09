@@ -1,7 +1,6 @@
 package services_test
 
 import (
-	"fmt"
 	"gobasic/services"
 	"testing"
 
@@ -39,11 +38,4 @@ func BenchmarkCheckGrade(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		services.CheckGrade(80)
 	}
-}
-
-// Documentation example and always start with `Example`
-func ExampleCheckGrade() {
-	grade := services.CheckGrade(80)
-	fmt.Println("Grade is ", grade)
-	// Output: A
 }

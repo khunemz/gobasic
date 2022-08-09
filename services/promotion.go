@@ -25,7 +25,6 @@ func (s promotionService) CalculateDiscount(amount int) (int, error) {
 
 	if amount >= promotion.PurchaseMin {
 		return amount - (promotion.DiscountPercent * amount / 100), nil
-	} else {
-		return amount, nil
 	}
+	return amount, nil
 }

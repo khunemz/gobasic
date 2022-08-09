@@ -1,5 +1,7 @@
 package services
 
+import "fmt"
+
 func CheckGrade(score int) string {
 	switch {
 	case score >= 80 && score <= 100:
@@ -13,4 +15,11 @@ func CheckGrade(score int) string {
 	default:
 		return "F"
 	}
+}
+
+// Documentation example and always start with `Example`
+func ExampleCheckGrade() {
+	grade := CheckGrade(80)
+	fmt.Println("Grade is ", grade)
+	// Output: A
 }
