@@ -1,7 +1,8 @@
-package handlers
+package handlers_test
 
 import (
 	"fmt"
+	"gobasic/handlers"
 	"gobasic/services"
 	"io"
 	"net/http/httptest"
@@ -21,7 +22,7 @@ func TestPromotionCalculateDiscount(t *testing.T) {
 		promoService := services.NewPromotionServiceMock()
 		promoService.On("CalculateDiscount", amount).Return(expected, nil)
 
-		promoHandler := NewPromotionHandler(promoService)
+		promoHandler := handlers.NewPromotionHandler(promoService)
 		// test call api
 		app := fiber.New()
 		app.Get("/calculate", promoHandler.CalculateDiscount)
