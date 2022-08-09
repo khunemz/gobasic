@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"gobasic/services"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCheckGrade(t *testing.T) {
@@ -27,10 +29,7 @@ func TestCheckGrade(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			grade := services.CheckGrade(c.score)
-			expected := c.expected
-			if grade != c.expected {
-				t.Errorf("Get %v expected %v", grade, expected)
-			}
+			assert.Equal(t, c.expected, grade)
 		})
 	}
 }
